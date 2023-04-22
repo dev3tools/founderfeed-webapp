@@ -68,7 +68,7 @@ async function handleSignIn(data: any) {
 <template>
   <main class="background">
     <section class="container">
-      <img src="../assets/vue.svg" alt="Logo" />
+      <img src="/favicon.ico" alt="Logo" />
       <div class="app-details">
         <h1>Welcome to the ChatGPT App</h1>
         <p>Description of the app</p>
