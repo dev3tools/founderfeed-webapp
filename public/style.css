@@ -1,0 +1,78 @@
+:root {
+  --color-bg: #0e1217;
+  --color-card-bg: #1c1f26;
+  --color-card-border: #a8b3cf;
+  --color-text: #fff;
+  --color-green: #00ffaa;
+  --color-green-opacity: #00ffaa50;
+  --color-red: #db5682;
+  --color-red-opacity: #db568250;
+  --color-blue: #b25fff;
+  --color-blue-opacity: #b25fff50;
+
+  --font-primary: "Inter", sans-serif;
+  --font-secondary: "Inter", sans-serif;
+
+  --fs-base: 1rem;
+
+  font-size: 14px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  height: 100vh;
+  height: 100dvh;
+  margin: 0 auto;
+  font-family: var(--font-primary);
+  font-size: var(--fs-base);
+  position: relative;
+}
+
+#__nuxt {
+  height: 100%;
+}
+
+.flex {
+  display: flex;
+}
+
+.gap-1 {
+  gap: 0.25rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.gap-8 {
+  gap: 2rem;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
