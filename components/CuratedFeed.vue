@@ -10,7 +10,7 @@ const blogs = [
     hasDownvoted: false,
     readtime: "10m",
     url: "https://google.com",
-    blogId: "somerandomid",
+    blogId: "somerandomid1",
     datePosted: "10 Jan",
   },
   {
@@ -23,7 +23,7 @@ const blogs = [
     hasDownvoted: false,
     readtime: "10m",
     url: "https://google.com",
-    blogId: "somerandomid",
+    blogId: "somerandomid2",
     datePosted: "10 Jan",
   },
   {
@@ -36,7 +36,7 @@ const blogs = [
     hasDownvoted: false,
     readtime: "10m",
     url: "https://google.com",
-    blogId: "somerandomid",
+    blogId: "somerandomid3",
     datePosted: "10 Jan",
   },
   {
@@ -49,7 +49,7 @@ const blogs = [
     hasDownvoted: false,
     readtime: "10m",
     url: "https://google.com",
-    blogId: "somerandomid",
+    blogId: "somerandomid4",
     datePosted: "10 Jan",
   },
   {
@@ -62,7 +62,7 @@ const blogs = [
     hasDownvoted: false,
     readtime: "10m",
     url: "https://google.com",
-    blogId: "somerandomid",
+    blogId: "somerandomid5",
     datePosted: "10 Jan",
   },
   {
@@ -75,7 +75,7 @@ const blogs = [
     hasDownvoted: false,
     readtime: "10m",
     url: "https://google.com",
-    blogId: "somerandomid",
+    blogId: "somerandomid6",
     datePosted: "10 Jan",
   },
   {
@@ -88,7 +88,7 @@ const blogs = [
     hasDownvoted: false,
     readtime: "10m",
     url: "https://google.com",
-    blogId: "somerandomid",
+    blogId: "somerandomid7",
     datePosted: "10 Jan",
   },
   {
@@ -101,7 +101,7 @@ const blogs = [
     hasDownvoted: false,
     readtime: "10m",
     url: "https://google.com",
-    blogId: "somerandomid",
+    blogId: "somerandomid8",
     datePosted: "10 Jan",
   },
   {
@@ -114,16 +114,17 @@ const blogs = [
     hasDownvoted: false,
     readtime: "10m",
     url: "https://google.com",
-    blogId: "somerandomid",
+    blogId: "somerandomid9",
     datePosted: "10 Jan",
   },
 ];
 </script>
 
 <template>
-  <div class="flex gap-8 flex-wrap blog-card-container">
+  <div class="flex gap-8 flex-wrap justify-center blog-card-container">
     <BlogCard
       v-for="blog in blogs"
+      :key="blog.blogId"
       :title="blog.title"
       :image="blog.image"
       :upvotes="blog.upvotes"
@@ -141,5 +142,7 @@ const blogs = [
 <style scoped>
 .blog-card-container {
   padding-block: 2rem;
+  margin-inline: auto;
+  max-width: 1080px;
 }
 </style>

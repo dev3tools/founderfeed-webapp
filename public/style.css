@@ -1,7 +1,7 @@
 :root {
   --color-bg: #0e1217;
   --color-card-bg: #1c1f26;
-  --color-card-border: #a8b3cf;
+  --color-card-border: #cccccc20;
   --color-text: #fff;
   --color-green: #00ffaa;
   --color-green-opacity: #00ffaa50;
@@ -31,6 +31,7 @@ body {
   font-family: var(--font-primary);
   font-size: var(--fs-base);
   position: relative;
+  overflow: hidden;
 }
 
 #__nuxt {
@@ -39,6 +40,10 @@ body {
 
 .flex {
   display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
 }
 
 .gap-1 {
@@ -75,4 +80,20 @@ body {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--color-text);
+  border-radius: 10px;
 }
