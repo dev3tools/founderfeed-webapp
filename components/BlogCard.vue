@@ -25,6 +25,10 @@ type BlogCardProps = {
   hasDownvoted: boolean;
 };
 const props = defineProps<BlogCardProps>();
+
+function handleReadMore() {
+  window.open(props.url, "_blank", "noopener");
+}
 </script>
 
 <template>
@@ -39,7 +43,10 @@ const props = defineProps<BlogCardProps>();
             background-color: white;
           "
         ></div>
-        <button class="read-external flex gap-1 items-center">
+        <button
+          class="read-external flex gap-1 items-center"
+          @click.stop="handleReadMore"
+        >
           Read More
           <ArrowTopRightOnSquareIcon style="width: 1.25rem" />
         </button>

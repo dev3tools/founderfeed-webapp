@@ -119,6 +119,12 @@ const blogs = [
     datePosted: "10 Jan",
   },
 ];
+
+const emit = defineEmits(["open-blog"]);
+
+function openBlog(blogId: string) {
+  emit("open-blog", blogId);
+}
 </script>
 
 <template>
@@ -136,6 +142,7 @@ const blogs = [
       :url="blog.url"
       :blog-id="blog.blogId"
       :date-posted="blog.datePosted"
+      @click.stop="openBlog(blog.blogId)"
     />
   </div>
 </template>

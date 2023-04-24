@@ -6,9 +6,17 @@ const route = useRoute();
 const selectedOption = ref(route.path.replace("/", ""));
 const searchInput = ref(null);
 const searchQuery = ref("");
+const showBlog = ref(false);
+const selectedBlogId = ref("");
 
 function handleMenuChange(ev) {
   selectedOption.value = ev;
+}
+
+function handleOpenBlog(ev) {
+  showBlog.value = true;
+  selectedBlogId.value = ev;
+  history.pushState("", "", `/posts/${ev}`);
 }
 </script>
 
@@ -39,7 +47,15 @@ function handleMenuChange(ev) {
         </form>
       </div>
     </TransitionFade>
-    <CuratedFeed />
+    <CuratedFeed @open-blog="handleOpenBlog" />
+    <TransitionFade>
+      <div class="overlay-container" v-if="showBlog">
+        <div class="overlay"></div>
+        <div class="overlay-content">
+          <BlogPost :blog-id="selectedBlogId" />
+        </div>
+      </div>
+    </TransitionFade>
   </NuxtLayout>
 </template>
 
