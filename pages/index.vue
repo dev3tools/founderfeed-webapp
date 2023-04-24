@@ -1,23 +1,36 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
-import { MagnifyingGlassIcon } from "@heroicons/vue/24/outline";
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 
 const pagePath = useRoute().path.replace("/", "");
 const selectedOption = ref(pagePath);
+const searchInput = ref(null);
+const searchQuery = ref("");
 </script>
 
 <template>
   <NuxtLayout name="loggedin">
     <TransitionFade>
       <div v-if="selectedOption === 'search'">
-        <form class="flex flex-grow">
-          <div class="input-group">
+        <form class="flex flex-grow" @submit.prevent="void 0">
+          <div class="input-group" @click.stop="searchInput.focus()">
             <MagnifyingGlassIcon class="input-icon" />
             <input
               type="text"
               placeholder="Search posts"
               class="search-input"
+              ref="searchInput"
+              v-model="searchQuery"
             />
+            <TransitionFade>
+              <BaseIconButton
+                v-if="searchQuery.trim()"
+                class="input-icon-end-btn"
+                @click="searchQuery = ''"
+              >
+                <XMarkIcon class="input-icon-end" />
+              </BaseIconButton>
+            </TransitionFade>
           </div>
         </form>
       </div>
@@ -35,9 +48,20 @@ const selectedOption = ref(pagePath);
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  cursor: text;
 }
 
 .input-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-grey);
+}
+
+.input-icon-end-btn {
+  padding: 0;
+}
+
+.input-icon-end {
   width: 1.5rem;
   height: 1.5rem;
   color: var(--color-grey);
