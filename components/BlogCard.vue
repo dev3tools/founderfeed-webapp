@@ -4,6 +4,7 @@ import {
   HandThumbDownIcon,
   PaperAirplaneIcon,
   BookmarkIcon,
+  ArrowTopRightOnSquareIcon,
 } from "@heroicons/vue/24/outline";
 import {
   HandThumbUpIcon as HandThumbUpSolidIcon,
@@ -28,12 +29,33 @@ const props = defineProps<BlogCardProps>();
 
 <template>
   <article>
-    <BaseCard class="gap-4 cursor-pointer">
-      <h2 class="title">{{ props.title }}</h2>
-      <div class="image-container">
-        <img :src="props.image" :alt="props.title" />
-      </div>
+    <BaseCard class="gap-4 cursor-pointer card">
       <div class="flex justify-between">
+        <div
+          style="
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background-color: white;
+          "
+        ></div>
+        <button class="read-external flex gap-1 items-center">
+          Read More
+          <ArrowTopRightOnSquareIcon style="width: 1.25rem" />
+        </button>
+      </div>
+      <h2 class="title">{{ props.title }}</h2>
+      <div class="flex flex-col gap-2">
+        <div class="flex gap-1 reading-details">
+          <span>{{ props.datePosted }}</span>
+          <span>•</span>
+          <span>{{ props.readtime }}</span>
+        </div>
+        <div class="image-container">
+          <img :src="props.image" :alt="props.title" />
+        </div>
+      </div>
+      <div class="flex justify-between" style="margin-top: 1rem">
         <div class="flex gap-1 items-center action-btn">
           <BaseTooltip :message="props.hasUpvoted ? 'Upvoted' : 'Upvote'">
             <BaseIconButton id="upvote-btn" class="icon-btn">
@@ -77,8 +99,12 @@ const props = defineProps<BlogCardProps>();
 </template>
 
 <style scoped>
+.card {
+  padding: 1rem 2rem;
+}
 .image-container {
   height: 200px;
+  margin-inline: -1.25rem;
   border-radius: 0.5rem;
   overflow: hidden;
 }
@@ -143,5 +169,34 @@ const props = defineProps<BlogCardProps>();
   white-space: normal;
   line-height: 1.5;
   height: 7rem;
+}
+
+.reading-details {
+  color: var(--color-slate-gray);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.read-external {
+  background-color: var(--color-text);
+  color: var(--color-bg);
+  border-radius: 1rem;
+  border: none;
+  box-shadow: none;
+  opacity: 0;
+  will-change: opacity;
+  transition: opacity 0.2s ease;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.card:where(:hover, :focus-visible) .read-external {
+  opacity: 1;
+}
+
+.read-external:hover {
+  box-shadow: 0px 0px 8px 0px var(--color-slate-gray);
 }
 </style>
