@@ -14,7 +14,7 @@ function onSidebarOptionChange(ev: string) {
   <div class="main-page-layout">
     <header>
       <div class="flex">
-        <span style="font-weight: 600; font-size: 2rem">FounderFeed.co</span>
+        <span class="logo">FounderFeed.co</span>
       </div>
     </header>
     <main>
@@ -107,5 +107,19 @@ aside {
 
 .input-group:has(:focus-within) {
   outline: 1px solid var(--color-text);
+}
+
+.logo {
+  background: linear-gradient(
+    to bottom right,
+    var(--color-green),
+    var(--color-green),
+    var(--color-blue),
+    var(--color-red)
+  );
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: var(--font-secondary);
+  font-size: 2.5rem;
 }
 </style>
