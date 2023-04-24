@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@morev/vue-transitions/nuxt"],
+  modules: ["@morev/vue-transitions/nuxt", "@pinia/nuxt"],
   app: {
     head: {
       link: [

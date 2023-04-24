@@ -142,7 +142,6 @@ const blogs = [
 <style scoped>
 .blog-card-container {
   padding-block: 2rem;
-  margin-inline: auto;
-  max-width: 1080px;
+  max-width: 1440px;
 }
 </style>

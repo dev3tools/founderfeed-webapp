@@ -3,10 +3,12 @@ import {
   HandThumbUpIcon,
   HandThumbDownIcon,
   PaperAirplaneIcon,
+  BookmarkIcon,
 } from "@heroicons/vue/24/outline";
 import {
   HandThumbUpIcon as HandThumbUpSolidIcon,
   HandThumbDownIcon as HandThumbDownSolidIcon,
+  BookmarkIcon as BookmarkSolidIcon,
 } from "@heroicons/vue/24/solid";
 
 type BlogCardProps = {
@@ -59,6 +61,11 @@ const props = defineProps<BlogCardProps>();
             >{{ downvotes }}</span
           >
         </div>
+        <BaseTooltip message="Bookmark">
+          <BaseIconButton id="bookmark-btn" class="icon-btn">
+            <BookmarkIcon />
+          </BaseIconButton>
+        </BaseTooltip>
         <BaseTooltip message="Share">
           <BaseIconButton id="share-btn" class="icon-btn">
             <PaperAirplaneIcon />
@@ -108,6 +115,11 @@ const props = defineProps<BlogCardProps>();
 #share-btn:hover {
   background-color: var(--color-blue-opacity);
   color: var(--color-blue);
+}
+
+#bookmark-btn:hover {
+  background-color: var(--color-yellow-opacity);
+  color: var(--color-yellow);
 }
 
 .upvoted,

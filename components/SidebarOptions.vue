@@ -16,6 +16,11 @@ import {
 
 const emit = defineEmits(["change"]);
 
+type SidebarOptionsProps = {
+  selectedOption?: string;
+};
+const props = defineProps<SidebarOptionsProps>();
+
 const options = [
   {
     name: "Top Picks",
@@ -35,11 +40,21 @@ const options = [
   },
 ];
 
-const selectedOption = ref(options[0]);
+const bookmarks = {
+  name: "Bookmarks",
+  slug: "bookmarks",
+};
+
+const selectedOption = computed(() => {
+  const option =
+    props.selectedOption === "bookmarks"
+      ? bookmarks
+      : options.find((option) => option.slug === props.selectedOption);
+  return option || options[0];
+});
 
 function handleClick(option: { name: string; slug: string }) {
-  selectedOption.value = option;
-  emit("change", option);
+  emit("change", option.slug);
   history.pushState({}, "", `/${option.slug}`);
 }
 </script>
@@ -101,7 +116,7 @@ function handleClick(option: { name: string; slug: string }) {
     <div class="flex flex-col gap-1">
       <button
         :class="{ selected: selectedOption.slug === 'bookmarks' }"
-        @click.stop="handleClick({ name: 'Bookmarks', slug: 'bookmarks' })"
+        @click.stop="handleClick(bookmarks)"
       >
         <BookmarkSolidIcon
           class="btn-icon"
