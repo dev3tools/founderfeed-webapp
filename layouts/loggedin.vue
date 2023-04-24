@@ -2,12 +2,15 @@
 import { useRoute } from "vue-router";
 import { Bars3Icon, XMarkIcon } from "@heroicons/vue/24/outline";
 
+const emit = defineEmits(["menu-change"]);
+
 const pagePath = useRoute().path.replace("/", "");
 const selectedOption = ref(pagePath);
 const sidebarExpanded = ref(false);
 
 function onSidebarOptionChange(ev: string) {
   selectedOption.value = ev;
+  emit("menu-change", selectedOption.value);
   sidebarExpanded.value = false;
 }
 </script>

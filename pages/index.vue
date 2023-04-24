@@ -2,14 +2,18 @@
 import { useRoute } from "vue-router";
 import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 
-const pagePath = useRoute().path.replace("/", "");
-const selectedOption = ref(pagePath);
+const route = useRoute();
+const selectedOption = ref(route.path.replace("/", ""));
 const searchInput = ref(null);
 const searchQuery = ref("");
+
+function handleMenuChange(ev) {
+  selectedOption.value = ev;
+}
 </script>
 
 <template>
-  <NuxtLayout name="loggedin">
+  <NuxtLayout name="loggedin" @menu-change="handleMenuChange">
     <TransitionFade>
       <div v-if="selectedOption === 'search'">
         <form class="flex flex-grow" @submit.prevent="void 0">
