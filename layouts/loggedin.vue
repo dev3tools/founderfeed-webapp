@@ -8,6 +8,7 @@ const sidebarExpanded = ref(false);
 
 function onSidebarOptionChange(ev: string) {
   selectedOption.value = ev;
+  sidebarExpanded.value = false;
 }
 </script>
 
