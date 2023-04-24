@@ -29,7 +29,7 @@ const props = defineProps<BlogCardProps>();
 <template>
   <article>
     <BaseCard class="gap-4 cursor-pointer">
-      <h2>{{ props.title }}</h2>
+      <h2 class="title">{{ props.title }}</h2>
       <div class="image-container">
         <img :src="props.image" :alt="props.title" />
       </div>
@@ -130,5 +130,18 @@ const props = defineProps<BlogCardProps>();
 .downvoted,
 .action-btn:hover .downvote {
   color: var(--color-red);
+}
+
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  line-height: 1.5;
+  height: 7rem;
 }
 </style>

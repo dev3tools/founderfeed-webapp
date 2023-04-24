@@ -1,7 +1,8 @@
 <script setup lang="ts">
 const blogs = [
   {
-    title: "Some Blog",
+    title:
+      "Some Blog sdflskjfsdl jsdfhksjdfhn sudrfyhwiurweh sdhfiuhsfd uwerywer sudfiusydfh 78weryw7yre8 sghdsdkjf iweyr7wyeri ghsdfd urtguyrtgwey ydugfuysdfgtuysdf ydsgfuystgdf",
     image:
       "https://res.cloudinary.com/daily-now/image/upload/f_auto,q_auto/v1/posts/d14089fcf09784fc737e695c785c6b89?_a=AQADKdt",
     upvotes: 12,
@@ -142,6 +143,7 @@ const blogs = [
 <style scoped>
 .blog-card-container {
   padding-block: 2rem;
+  margin-inline: auto;
   max-width: 1440px;
 }
 </style>
