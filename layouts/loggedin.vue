@@ -38,6 +38,35 @@ function onSidebarOptionChange(ev: string) {
         <slot />
       </div>
     </main>
+    <TransitionSlide>
+      <div class="overlay-container" v-if="sidebarExpanded">
+        <div class="overlay"></div>
+        <aside
+          class="overlay-content mobile-sidebar flex flex-col"
+          :class="{ expanded: sidebarExpanded }"
+        >
+          <header>
+            <div class="flex gap-4 items-center">
+              <BaseIconButton
+                class="menu-icon-button"
+                :class="{ expanded: sidebarExpanded }"
+                @click.stop="sidebarExpanded = !sidebarExpanded"
+              >
+                <Bars3Icon class="menu-icon" v-if="!sidebarExpanded" />
+                <XMarkIcon class="menu-icon" v-else />
+              </BaseIconButton>
+              <span class="logo">FounderFeed.co</span>
+            </div>
+          </header>
+          <SidebarOptions
+            style="padding-top: 2rem"
+            :selected-option="selectedOption"
+            @change="onSidebarOptionChange"
+          />
+          <NuxtPage />
+        </aside>
+      </div>
+    </TransitionSlide>
   </div>
 </template>
 
@@ -109,6 +138,14 @@ aside {
 @media screen and (max-width: 1023px) {
   .desktop-sidebar {
     display: none;
+  }
+
+  .mobile-sidebar {
+    padding-top: 0;
+  }
+
+  .mobile-sidebar header {
+    padding: 0;
   }
 }
 
