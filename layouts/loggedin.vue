@@ -43,8 +43,10 @@ function onSidebarOptionChange(ev: string) {
       </div>
     </main>
     <TransitionSlide>
-      <div class="overlay-container" v-if="sidebarExpanded">
-        <div class="overlay"></div>
+      <BaseOverlay
+        v-if="sidebarExpanded"
+        @overlay-click="sidebarExpanded = false"
+      >
         <aside
           class="overlay-content mobile-sidebar flex flex-col"
           :class="{ expanded: sidebarExpanded }"
@@ -69,7 +71,7 @@ function onSidebarOptionChange(ev: string) {
           />
           <NuxtPage />
         </aside>
-      </div>
+      </BaseOverlay>
     </TransitionSlide>
   </div>
 </template>

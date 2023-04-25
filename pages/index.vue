@@ -22,6 +22,12 @@ function handleOpenBlog(ev) {
   selectedBlogId.value = ev;
   history.pushState("", "", `/posts/${ev}`);
 }
+
+function hideOverlay() {
+  showBlog.value = false;
+  selectedBlogId.value = "";
+  history.back();
+}
 </script>
 
 <template>
@@ -53,12 +59,11 @@ function handleOpenBlog(ev) {
     </TransitionFade>
     <CuratedFeed @open-blog="handleOpenBlog" />
     <TransitionFade>
-      <div class="overlay-container" v-if="showBlog">
-        <div class="overlay"></div>
+      <BaseOverlay v-if="showBlog" @overlay-click="hideOverlay">
         <div class="overlay-content">
           <BlogPost :blog-id="selectedBlogId" />
         </div>
-      </div>
+      </BaseOverlay>
     </TransitionFade>
   </NuxtLayout>
 </template>
