@@ -14,6 +14,6 @@
 
   background-color: var(--color-card-border);
   color: var(--color-text);
-  font-size: 0.75rem;
+  font-size: 0.825rem;
 }
 </style>
