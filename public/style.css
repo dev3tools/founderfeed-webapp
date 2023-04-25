@@ -35,6 +35,7 @@ html {
   height: 100vh;
   z-index: 999999;
   isolation: isolate;
+  overflow: auto;
 }
 
 .overlay {

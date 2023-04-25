@@ -13,7 +13,7 @@ import {
 } from "@heroicons/vue/24/solid";
 
 type BlogCardProps = {
-  blogId: string;
+  blogId: string | number;
   title: string;
   image: string;
   url: string;
@@ -23,6 +23,7 @@ type BlogCardProps = {
   datePosted: string;
   hasUpvoted: boolean;
   hasDownvoted: boolean;
+  source: string;
 };
 const props = defineProps<BlogCardProps>();
 
@@ -35,14 +36,15 @@ function handleReadMore() {
   <article>
     <BaseCard class="gap-4 cursor-pointer card">
       <div class="flex justify-between">
-        <div
+        <img
+          :src="props.source"
           style="
             width: 2.5rem;
             height: 2.5rem;
             border-radius: 50%;
             background-color: white;
           "
-        ></div>
+        />
         <button
           class="read-external flex gap-1 items-center"
           @click.stop="handleReadMore"
@@ -55,8 +57,8 @@ function handleReadMore() {
       <div class="flex flex-col gap-2">
         <div class="flex gap-1 reading-details">
           <span>{{ props.datePosted }}</span>
-          <span>•</span>
-          <span>{{ props.readtime }}</span>
+          <!-- <span>•</span>
+          <span>{{ props.readtime }}</span> -->
         </div>
         <div class="image-container">
           <img :src="props.image" :alt="props.title" />

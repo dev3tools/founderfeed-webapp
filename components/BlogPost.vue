@@ -11,14 +11,43 @@ import {
   HandThumbDownIcon as HandThumbDownSolidIcon,
   BookmarkIcon as BookmarkSolidIcon,
 } from "@heroicons/vue/24/solid";
+import * as dayjs from "dayjs";
+import { fetchPostById } from "@/services/api.service";
 
 type BlogPostProps = {
   blogId: string;
 };
 const props = defineProps<BlogPostProps>();
 
+const blog = ref({});
+
+fetchPostById(props.blogId).then((res) => {
+  const fetchedBlog = res.data;
+  const uploadDate = dayjs(fetchedBlog.uploaded_at);
+  const today = dayjs();
+  const datePosted =
+    uploadDate.format("MMM D YYYY") === today.format("MMM D YYYY")
+      ? "Today"
+      : `${uploadDate.format("MMM D")}`;
+  blog.value = {
+    blogId: fetchedBlog.id,
+    title: fetchedBlog.title,
+    image: fetchedBlog.image,
+    upvotes: fetchedBlog.upvotes,
+    downvotes: fetchedBlog.downvotes,
+    hasUpvoted: fetchedBlog.user_vote === 1,
+    hasDownvoted: fetchedBlog.user_vote === -1,
+    url: fetchedBlog.link,
+    source: fetchedBlog.source,
+    readtime: "1 min read",
+    summary: fetchedBlog.summary,
+    tags: fetchedBlog.tags,
+    datePosted,
+  };
+});
+
 function handleReadMore() {
-  window.open("https://google.com", "_blank", "noopener");
+  window.open(blog.url, "_blank", "noopener");
 }
 </script>
 
@@ -26,7 +55,7 @@ function handleReadMore() {
   <div class="blog">
     <main class="flex flex-col gap-8">
       <h2 class="title">
-        ECMAScript ES6+: A Comprehensive Guide to Modern JavaScript
+        {{ blog.title }}
       </h2>
       <div>
         <button
@@ -38,50 +67,41 @@ function handleReadMore() {
         </button>
       </div>
       <div class="blog-summary">
-        <span class="tldr">TLDR</span> JavaScript has come a long way since its
-        inception, and ES6+ represents a massive leap forward in terms of
-        features and ease of use. In this article, we'll introduce you to the
-        modern era of JavaScript development by exploring some of the most
-        significant enhancements introduced in ES6+. Let’s dive into this
-        fantastic journey together.
+        <span class="tldr">TLDR;</span> {{ blog.summary }}
       </div>
       <div class="flex gap-4">
-        <BaseChip>#SaaS</BaseChip>
-        <BaseChip>#Pricing</BaseChip>
+        <BaseChip v-for="tag in blog.tags" :key="tag">{{ tag }}</BaseChip>
       </div>
       <div class="flex gap-1 reading-details">
-        <span>Apr 18</span>
-        <span>•</span>
-        <span>15m readtime</span>
+        <span>{{ blog.datePosted }}</span>
+        <!-- <span>•</span>
+        <span>15m readtime</span> -->
       </div>
       <div class="image-container">
-        <img
-          src="https://res.cloudinary.com/daily-now/image/upload/f_auto,q_auto/v1/posts/f226012f1d5a837a81099f9d8ec074d9"
-          alt="Blog"
-        />
+        <img :src="blog.image" :alt="blog.title" />
       </div>
       <BaseCard style="width: auto; padding: 0.5rem 1rem">
         <div class="flex justify-between items-center">
           <div class="flex gap-1 items-center action-btn">
             <BaseTooltip :message="'Upvote'">
               <BaseIconButton id="upvote-btn" class="icon-btn">
-                <!-- <HandThumbUpSolidIcon v-if="props.hasUpvoted" class="upvoted" /> -->
-                <HandThumbUpIcon />
+                <HandThumbUpSolidIcon v-if="blog.hasUpvoted" class="upvoted" />
+                <HandThumbUpIcon v-else />
               </BaseIconButton>
             </BaseTooltip>
-            <span class="icon-btn-text upvote">18</span>
+            <span class="icon-btn-text upvote">{{ blog.upvotes }}</span>
           </div>
           <div class="flex gap-1 items-center action-btn">
             <BaseTooltip :message="'Downvote'">
               <BaseIconButton id="downvote-btn" class="icon-btn">
-                <!-- <HandThumbDownSolidIcon
-                  v-if="props.hasDownvoted"
+                <HandThumbDownSolidIcon
+                  v-if="blog.hasDownvoted"
                   class="downvoted"
-                /> -->
-                <HandThumbDownIcon />
+                />
+                <HandThumbDownIcon v-else />
               </BaseIconButton>
             </BaseTooltip>
-            <span class="icon-btn-text downvote">10</span>
+            <span class="icon-btn-text downvote">{{ blog.downvotes }}</span>
           </div>
           <BaseTooltip message="Bookmark">
             <BaseIconButton id="bookmark-btn" class="icon-btn">
@@ -121,14 +141,15 @@ function handleReadMore() {
 .blog-summary {
   font-size: 1rem;
   line-height: 1.5;
-  border-left: 2px solid var(--color-green);
+  border-left: 4px solid var(--color-green);
   padding-left: 2rem;
-  padding-block: 0.5rem;
+  padding-block: 0.25rem;
 }
 
 .tldr {
   color: var(--color-green);
   font-weight: 500;
+  margin-right: 0.5rem;
 }
 
 .image-container {

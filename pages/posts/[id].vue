@@ -3,6 +3,10 @@ import { useRoute } from "vue-router";
 
 const route = useRoute();
 const selectedBlogId = route.params.id;
+
+definePageMeta({
+  middleware: ["auth"],
+});
 </script>
 
 <template>
