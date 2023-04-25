@@ -50,7 +50,7 @@ const selectedOption = computed(() => {
     props.selectedOption === "bookmarks"
       ? bookmarks
       : options.find((option) => option.slug === props.selectedOption);
-  return option || options[0];
+  return option || { name: "", slug: "" };
 });
 
 function handleClick(option: { name: string; slug: string }) {

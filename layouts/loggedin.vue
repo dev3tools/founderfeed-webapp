@@ -8,6 +8,10 @@ const pagePath = useRoute().path.replace("/", "");
 const selectedOption = ref(pagePath);
 const sidebarExpanded = ref(false);
 
+if (selectedOption.value === "") {
+  navigateTo("/top-picks");
+}
+
 function onSidebarOptionChange(ev: string) {
   selectedOption.value = ev;
   emit("menu-change", selectedOption.value);
