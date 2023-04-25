@@ -68,14 +68,16 @@ async function handleSignIn(data: any) {
 <template>
   <main class="background">
     <Body class="login-body"></Body>
-    <section class="container">
+    <section class="container gap-8">
       <BaseLogo />
       <div class="app-details">
         <h1>Welcome to the FounderFeed.io</h1>
         <p>Description of the app</p>
       </div>
-      <p>Please sign in with your Google account to continue</p>
-      <div id="google_btn" class="g_id_signin"></div>
+      <div class="flex flex-col gap-4 justify-between items-center">
+        <p>Please sign in with your Google account to continue</p>
+        <div id="google_btn" class="g_id_signin"></div>
+      </div>
     </section>
   </main>
 </template>
@@ -93,11 +95,13 @@ async function handleSignIn(data: any) {
   background: var(--color-bg);
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
   padding: 2.5rem;
+  width: calc(100% - 4rem);
+  margin: 0 2rem;
+  max-width: 360px;
   display: grid;
-  gap: 1.5rem;
   grid-template-columns: 1fr;
   justify-items: center;
-  border-radius: 10px;
+  border-radius: 2rem;
 }
 
 .app-details {
