@@ -121,7 +121,11 @@ function handleReadMore() {
                 <HandThumbUpIcon v-else />
               </BaseIconButton>
             </BaseTooltip>
-            <span class="icon-btn-text upvote">{{ blog.upvotes }}</span>
+            <span
+              class="icon-btn-text upvote"
+              :class="{ upvoted: blog.hasUpvoted }"
+              >{{ blog.upvotes }}</span
+            >
           </div>
           <div class="flex gap-1 items-center action-btn">
             <BaseTooltip :message="'Downvote'">
@@ -137,7 +141,11 @@ function handleReadMore() {
                 <HandThumbDownIcon v-else />
               </BaseIconButton>
             </BaseTooltip>
-            <span class="icon-btn-text downvote">{{ blog.downvotes }}</span>
+            <span
+              class="icon-btn-text downvote"
+              :class="{ downvoted: blog.hasDownvoted }"
+              >{{ blog.downvotes }}</span
+            >
           </div>
           <BaseTooltip message="Bookmark">
             <BaseIconButton id="bookmark-btn" class="icon-btn">
