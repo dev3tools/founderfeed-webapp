@@ -182,7 +182,7 @@ function handleReadMore() {
 .reading-details {
   color: var(--color-slate-gray);
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .read-external {
