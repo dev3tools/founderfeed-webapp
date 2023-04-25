@@ -11,7 +11,7 @@ import {
   HandThumbDownIcon as HandThumbDownSolidIcon,
   BookmarkIcon as BookmarkSolidIcon,
 } from "@heroicons/vue/24/solid";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 import { fetchPostById, fetchTags, addUserVote } from "@/services/api.service";
 
 type BlogPostProps = {

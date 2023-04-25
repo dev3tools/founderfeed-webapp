@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { fetchFeed } from "@/services/api.service";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 import { useRoute } from "vue-router";
 
 const blogs = ref([]);
