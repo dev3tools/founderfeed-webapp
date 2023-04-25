@@ -60,8 +60,10 @@ function hideOverlay() {
     <CuratedFeed @open-blog="handleOpenBlog" />
     <TransitionFade>
       <BaseOverlay v-if="showBlog" @overlay-click="hideOverlay">
-        <div class="overlay-content">
-          <BlogPost :blog-id="selectedBlogId" />
+        <div style="padding-inline: 1rem">
+          <div class="overlay-content">
+            <BlogPost :blog-id="selectedBlogId" />
+          </div>
         </div>
       </BaseOverlay>
     </TransitionFade>
@@ -108,5 +110,10 @@ function hideOverlay() {
 
 .input-group:has(:focus-within) {
   outline: 1px solid var(--color-text);
+}
+
+.overlay-content {
+  max-width: 768px;
+  margin: 2rem auto;
 }
 </style>

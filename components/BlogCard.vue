@@ -176,6 +176,7 @@ function handleReadMore() {
   white-space: normal;
   line-height: 1.5;
   height: 7rem;
+  font-weight: 500;
 }
 
 .reading-details {
