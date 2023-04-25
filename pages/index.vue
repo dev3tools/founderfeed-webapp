@@ -62,7 +62,7 @@ function hideOverlay() {
       <BaseOverlay v-if="showBlog" @overlay-click="hideOverlay">
         <div style="padding-inline: 1rem">
           <div class="overlay-content">
-            <BlogPost :blog-id="selectedBlogId" />
+            <BlogPost :blog-id="selectedBlogId" class="blog-post" />
           </div>
         </div>
       </BaseOverlay>
@@ -115,5 +115,7 @@ function hideOverlay() {
 .overlay-content {
   max-width: 768px;
   margin: 2rem auto;
+  border: 1px solid var(--color-card-border);
+  border-radius: 2rem;
 }
 </style>

@@ -33,7 +33,7 @@ function handleReadMore() {
           class="read-external flex gap-1 items-center"
           @click.stop="handleReadMore"
         >
-          Read More
+          Read the blog
           <ArrowTopRightOnSquareIcon style="width: 1.25rem" />
         </button>
       </div>
@@ -103,6 +103,8 @@ function handleReadMore() {
 <style scoped>
 .blog {
   padding: 2.5rem;
+  max-width: 768px;
+  margin: 0 auto;
 }
 .title {
   margin: 0;

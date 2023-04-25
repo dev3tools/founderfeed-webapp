@@ -61,7 +61,7 @@ function onSidebarOptionChange(ev: string) {
                 <Bars3Icon class="menu-icon" v-if="!sidebarExpanded" />
                 <XMarkIcon class="menu-icon" v-else />
               </BaseIconButton>
-              <span class="logo">FounderFeed.co</span>
+              <BaseLogo />
             </div>
           </header>
           <SidebarOptions

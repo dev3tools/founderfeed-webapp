@@ -55,7 +55,7 @@ const selectedOption = computed(() => {
 
 function handleClick(option: { name: string; slug: string }) {
   emit("change", option.slug);
-  history.pushState({}, "", `/${option.slug}`);
+  navigateTo(`/${option.slug}`);
 }
 </script>
 
