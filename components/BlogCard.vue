@@ -11,6 +11,9 @@ import {
   HandThumbDownIcon as HandThumbDownSolidIcon,
   BookmarkIcon as BookmarkSolidIcon,
 } from "@heroicons/vue/24/solid";
+import { addUserVote } from "@/services/api.service";
+
+const emit = defineEmits(["refresh"]);
 
 type BlogCardProps = {
   blogId: string | number;
@@ -29,6 +32,16 @@ const props = defineProps<BlogCardProps>();
 
 function handleReadMore() {
   window.open(props.url, "_blank", "noopener");
+}
+
+async function handleUpvote() {
+  await addUserVote(props.blogId, props.hasUpvoted ? 0 : 1);
+  emit("refresh");
+}
+
+async function handleDownvote() {
+  await addUserVote(props.blogId, props.hasDownvoted ? 0 : -1);
+  emit("refresh");
 }
 </script>
 
@@ -67,8 +80,15 @@ function handleReadMore() {
       <div class="flex justify-between" style="margin-top: 1rem">
         <div class="flex gap-1 items-center action-btn">
           <BaseTooltip :message="props.hasUpvoted ? 'Upvoted' : 'Upvote'">
-            <BaseIconButton id="upvote-btn" class="icon-btn">
-              <HandThumbUpSolidIcon v-if="props.hasUpvoted" class="upvoted" />
+            <BaseIconButton
+              id="upvote-btn"
+              class="icon-btn"
+              @click.stop="handleUpvote"
+            >
+              <HandThumbUpSolidIcon
+                v-if="props.hasUpvoted"
+                class="upvoted upvoted-icon"
+              />
               <HandThumbUpIcon v-else />
             </BaseIconButton>
           </BaseTooltip>
@@ -77,11 +97,14 @@ function handleReadMore() {
           }}</span>
         </div>
         <div class="flex gap-1 items-center action-btn">
-          <BaseTooltip :message="props.hasDownvoted ? 'Downvoted' : 'Downvote'">
+          <BaseTooltip
+            :message="props.hasDownvoted ? 'Downvoted' : 'Downvote'"
+            @click.stop="handleDownvote"
+          >
             <BaseIconButton id="downvote-btn" class="icon-btn">
               <HandThumbDownSolidIcon
                 v-if="props.hasDownvoted"
-                class="downvoted"
+                class="downvoted downvoted-icon"
               />
               <HandThumbDownIcon v-else />
             </BaseIconButton>
@@ -160,6 +183,52 @@ function handleReadMore() {
 .upvoted,
 .action-btn:hover .upvote {
   color: var(--color-green);
+}
+
+.upvoted-icon {
+  animation: upvote 0.3s ease-in-out;
+  transform-origin: 0;
+}
+
+.downvoted-icon {
+  animation: downvote 0.3s ease-in-out;
+  transform-origin: 0;
+}
+
+@keyframes upvote {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.25) rotate(-45deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes downvote {
+  0% {
+    transform: scale(1) translateX(0);
+  }
+  15% {
+    transform: scale(1) translateX(-0.25rem);
+  }
+  30% {
+    transform: scale(1) translateX(0);
+  }
+  45% {
+    transform: scale(1) translateX(0.25rem);
+  }
+  70% {
+    transform: scale(1) translateX(0);
+  }
+  85% {
+    transform: scale(1) translateX(-0.25rem);
+  }
+  100% {
+    transform: scale(1) translateX(0);
+  }
 }
 
 .downvoted,

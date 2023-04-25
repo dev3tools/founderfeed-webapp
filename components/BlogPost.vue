@@ -12,7 +12,7 @@ import {
   BookmarkIcon as BookmarkSolidIcon,
 } from "@heroicons/vue/24/solid";
 import * as dayjs from "dayjs";
-import { fetchPostById } from "@/services/api.service";
+import { fetchPostById, fetchTags, addUserVote } from "@/services/api.service";
 
 type BlogPostProps = {
   blogId: string;
@@ -20,31 +20,56 @@ type BlogPostProps = {
 const props = defineProps<BlogPostProps>();
 
 const blog = ref({});
+let tags = [];
 
-fetchPostById(props.blogId).then((res) => {
-  const fetchedBlog = res.data;
-  const uploadDate = dayjs(fetchedBlog.uploaded_at);
-  const today = dayjs();
-  const datePosted =
-    uploadDate.format("MMM D YYYY") === today.format("MMM D YYYY")
-      ? "Today"
-      : `${uploadDate.format("MMM D")}`;
-  blog.value = {
-    blogId: fetchedBlog.id,
-    title: fetchedBlog.title,
-    image: fetchedBlog.image,
-    upvotes: fetchedBlog.upvotes,
-    downvotes: fetchedBlog.downvotes,
-    hasUpvoted: fetchedBlog.user_vote === 1,
-    hasDownvoted: fetchedBlog.user_vote === -1,
-    url: fetchedBlog.link,
-    source: fetchedBlog.source,
-    readtime: "1 min read",
-    summary: fetchedBlog.summary,
-    tags: fetchedBlog.tags,
-    datePosted,
-  };
+fetchTags().then((res) => {
+  tags = res.data;
+  fetchPost();
 });
+
+function fetchPost() {
+  fetchPostById(props.blogId).then((res) => {
+    const fetchedBlog = res.data;
+    const uploadDate = dayjs(fetchedBlog.uploaded_at);
+    const today = dayjs();
+    const datePosted =
+      uploadDate.format("MMM D YYYY") === today.format("MMM D YYYY")
+        ? "Today"
+        : `${uploadDate.format("MMM D")}`;
+    const blogTags = [];
+    fetchedBlog.tags.forEach((tag) => {
+      const tagObj = tags.find((t) => t.id === tag);
+      if (tagObj) {
+        blogTags.push(tagObj.name);
+      }
+    });
+    blog.value = {
+      blogId: fetchedBlog.id,
+      title: fetchedBlog.title,
+      image: fetchedBlog.image,
+      upvotes: fetchedBlog.upvotes,
+      downvotes: fetchedBlog.downvotes,
+      hasUpvoted: fetchedBlog.user_vote === 1,
+      hasDownvoted: fetchedBlog.user_vote === -1,
+      url: fetchedBlog.link,
+      source: fetchedBlog.source,
+      readtime: "1 min read",
+      summary: fetchedBlog.summary,
+      tags: blogTags,
+      datePosted,
+    };
+  });
+}
+
+async function handleUpvote() {
+  await addUserVote(blog.value.blogId, blog.value.hasUpvoted ? 0 : 1);
+  fetchPost();
+}
+
+async function handleDownvote() {
+  await addUserVote(blog.value.blogId, blog.value.hasDownvoted ? 0 : -1);
+  fetchPost();
+}
 
 function handleReadMore() {
   window.open(blog.url, "_blank", "noopener");
@@ -84,8 +109,15 @@ function handleReadMore() {
         <div class="flex justify-between items-center">
           <div class="flex gap-1 items-center action-btn">
             <BaseTooltip :message="'Upvote'">
-              <BaseIconButton id="upvote-btn" class="icon-btn">
-                <HandThumbUpSolidIcon v-if="blog.hasUpvoted" class="upvoted" />
+              <BaseIconButton
+                id="upvote-btn"
+                class="icon-btn"
+                @click.stop="handleUpvote"
+              >
+                <HandThumbUpSolidIcon
+                  v-if="blog.hasUpvoted"
+                  class="upvoted upvoted-icon"
+                />
                 <HandThumbUpIcon v-else />
               </BaseIconButton>
             </BaseTooltip>
@@ -93,10 +125,14 @@ function handleReadMore() {
           </div>
           <div class="flex gap-1 items-center action-btn">
             <BaseTooltip :message="'Downvote'">
-              <BaseIconButton id="downvote-btn" class="icon-btn">
+              <BaseIconButton
+                id="downvote-btn"
+                class="icon-btn"
+                @click.stop="handleDownvote"
+              >
                 <HandThumbDownSolidIcon
                   v-if="blog.hasDownvoted"
-                  class="downvoted"
+                  class="downvoted downvoted-icon"
                 />
                 <HandThumbDownIcon v-else />
               </BaseIconButton>
@@ -223,5 +259,51 @@ function handleReadMore() {
 .read-external:hover {
   background-color: var(--color-text);
   color: var(--color-bg);
+}
+
+.upvoted-icon {
+  animation: upvote 0.3s ease-in-out;
+  transform-origin: 0;
+}
+
+.downvoted-icon {
+  animation: downvote 0.3s ease-in-out;
+  transform-origin: 0;
+}
+
+@keyframes upvote {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.25) rotate(-45deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes downvote {
+  0% {
+    transform: scale(1) translateX(0);
+  }
+  15% {
+    transform: scale(1) translateX(-0.25rem);
+  }
+  30% {
+    transform: scale(1) translateX(0);
+  }
+  45% {
+    transform: scale(1) translateX(0.25rem);
+  }
+  70% {
+    transform: scale(1) translateX(0);
+  }
+  85% {
+    transform: scale(1) translateX(-0.25rem);
+  }
+  100% {
+    transform: scale(1) translateX(0);
+  }
 }
 </style>

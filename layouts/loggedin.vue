@@ -9,6 +9,7 @@ const selectedOption = ref(pagePath);
 const sidebarExpanded = ref(false);
 
 if (selectedOption.value === "") {
+  selectedOption.value = "top-picks";
   navigateTo("/top-picks");
 }
 

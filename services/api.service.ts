@@ -60,8 +60,12 @@ function fetchPostById(id: string) {
   return api.get(`/feeds/${id}`);
 }
 
+function fetchTags() {
+  return api.get("/tags/");
+}
+
 function addUserVote(feed: number, vote: -1 | 0 | 1) {
   return api.post(`/vote/`, { feed, vote });
 }
 
-export { loginWithGoogle, fetchFeed, addUserVote, fetchPostById };
+export { loginWithGoogle, fetchFeed, addUserVote, fetchPostById, fetchTags };
