@@ -36,7 +36,7 @@ function fetchPost() {
       uploadDate.format("MMM D YYYY") === today.format("MMM D YYYY")
         ? "Today"
         : `${uploadDate.format("MMM D")}`;
-    const blogTags = [];
+    const blogTags: string[] = [];
     fetchedBlog.tags.forEach((tag) => {
       const tagObj = tags.find((t) => t.id === tag);
       if (tagObj) {

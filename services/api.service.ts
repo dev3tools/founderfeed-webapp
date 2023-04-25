@@ -22,21 +22,23 @@ api.interceptors.response.use(
   (error) => {
     if (error.response.status) {
       if (error.response.status === 401) {
-        const refreshToken = localStorage.getItem("refresh_token");
-        if (refreshToken) {
-          refreshAuthToken(refreshToken)
-            .then((response) => {
-              localStorage.setItem("refresh_token", response.data.refresh);
-              localStorage.setItem("access_token", response.data.access);
-              console.log(error);
-            })
-            .catch(() => {
-              localStorage.clear();
-              useRouter().push("/login");
-            });
-        } else {
-          localStorage.clear();
-          useRouter().push("/login");
+        if (process.client) {
+          const refreshToken = localStorage.getItem("refresh_token");
+          if (refreshToken) {
+            refreshAuthToken(refreshToken)
+              .then((response) => {
+                localStorage.setItem("refresh_token", response.data.refresh);
+                localStorage.setItem("access_token", response.data.access);
+                console.log(error);
+              })
+              .catch(() => {
+                localStorage.clear();
+                useRouter().push("/login");
+              });
+          } else {
+            localStorage.clear();
+            useRouter().push("/login");
+          }
         }
       }
     }
