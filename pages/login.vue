@@ -11,11 +11,6 @@ const router = useRouter();
 // const loader = useLoaderStore();
 
 onBeforeMount(() => {
-  document.body.classList.add("gradient-background");
-});
-
-onBeforeUnmount(() => {
-  document.body.classList.remove("gradient-background");
   if (process.client) {
     const access_token = localStorage.getItem("access_token");
     if (access_token) {
