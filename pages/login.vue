@@ -16,6 +16,12 @@ onBeforeMount(() => {
 
 onBeforeUnmount(() => {
   document.body.classList.remove("gradient-background");
+  if (process.client) {
+    const access_token = localStorage.getItem("access_token");
+    if (access_token) {
+      router.replace("/");
+    }
+  }
 });
 
 onMounted(() => {
@@ -46,31 +52,26 @@ async function handleSignIn(data: any) {
     return;
   }
   const userDetails: any = jwt_decode(data.credential);
-  //   user.accessToken = apiResponse.tokens.access;
-  sessionStorage.setItem("access_token", apiResponse.tokens.access);
+  localStorage.setItem("access_token", apiResponse.tokens.access);
   localStorage.setItem("refresh_token", apiResponse.tokens.refresh);
-  //   startRefreshInterval(apiResponse.tokens.refresh);
-  //   user.email = userDetails.email;
-  //   user.profileImage = userDetails.picture;
-  //   user.name = userDetails.name;
-  const userProfile = {
-    // name: user.name,
-    // email: user.email,
-    // profileImage: user.profileImage,
+  const user = {
+    name: userDetails.name,
+    profileImage: userDetails.picture,
+    email: userDetails.email,
   };
-  console.log(userDetails);
-  localStorage.setItem("user_profile", JSON.stringify(userProfile));
+  localStorage.setItem("user_profile", JSON.stringify(user));
   //   loader.hide();
-  router.replace({ name: "Dashboard" });
+  router.replace("/");
 }
 </script>
 
 <template>
   <main class="background">
+    <Body class="login-body"></Body>
     <section class="container">
-      <img src="/favicon.ico" alt="Logo" />
+      <BaseLogo />
       <div class="app-details">
-        <h1>Welcome to the ChatGPT App</h1>
+        <h1>Welcome to the FounderFeed.io</h1>
         <p>Description of the app</p>
       </div>
       <p>Please sign in with your Google account to continue</p>
@@ -89,7 +90,7 @@ async function handleSignIn(data: any) {
 }
 
 .container {
-  background-color: rgba(255, 255, 255, 0.5);
+  background: var(--color-bg);
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
   padding: 2.5rem;
   display: grid;
@@ -110,14 +111,14 @@ async function handleSignIn(data: any) {
   font-size: 1.125rem;
 }
 
-img {
-  width: 4rem;
-  aspect-ratio: 1/1;
-  margin-bottom: 20px;
-}
-
 h1,
 p {
   margin: 0;
+}
+</style>
+
+<style>
+.login-body {
+  background: var(--color-blue-variant);
 }
 </style>

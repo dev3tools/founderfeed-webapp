@@ -9,6 +9,10 @@ const searchQuery = ref("");
 const showBlog = ref(false);
 const selectedBlogId = ref("");
 
+definePageMeta({
+  middleware: ["auth"],
+});
+
 function handleMenuChange(ev) {
   selectedOption.value = ev;
 }

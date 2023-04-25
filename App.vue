@@ -1,5 +1,3 @@
 <template>
-  <TransitionFade>
-    <NuxtPage />
-  </TransitionFade>
+  <NuxtPage />
 </template>

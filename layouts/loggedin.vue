@@ -27,7 +27,7 @@ function onSidebarOptionChange(ev: string) {
           <Bars3Icon class="menu-icon" v-if="!sidebarExpanded" />
           <XMarkIcon class="menu-icon" v-else />
         </BaseIconButton>
-        <span class="logo">FounderFeed.co</span>
+        <BaseLogo />
       </div>
     </header>
     <main>
@@ -123,20 +123,6 @@ aside {
   height: calc(100dvh - 80px - 4rem);
   padding: 2rem;
   overflow: auto;
-}
-
-.logo {
-  background: linear-gradient(
-    to bottom right,
-    var(--color-green),
-    var(--color-green),
-    var(--color-blue),
-    var(--color-red)
-  );
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-family: var(--font-secondary);
-  font-size: 2.5rem;
 }
 
 @media screen and (max-width: 1023px) {
