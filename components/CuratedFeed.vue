@@ -3,6 +3,12 @@ import { fetchFeed } from "@/services/api.service";
 import dayjs from "dayjs";
 import { useRoute } from "vue-router";
 
+type FeedProps = {
+  search?: string;
+};
+
+const props = defineProps<FeedProps>();
+
 const blogs = ref([]);
 const route = useRoute();
 populateFeed();
@@ -14,8 +20,22 @@ watch(
   }
 );
 
+watch(
+  () => props.search,
+  () => {
+    populateFeed();
+  }
+);
+
 function populateFeed() {
-  fetchFeed().then((res) => {
+  const feedOptions = {};
+  if (route.path === "/top-picks") {
+    feedOptions["day"] = new Date().toISOString().split("T")[0];
+  }
+  if (route.path === "/search" && props.search) {
+    feedOptions["title"] = props.search;
+  }
+  fetchFeed(feedOptions).then((res) => {
     blogs.value = res.data.map((blog) => {
       const uploadDate = dayjs(blog.uploaded_at);
       const today = dayjs();
@@ -37,6 +57,7 @@ function populateFeed() {
         summary: blog.summary,
         tags: blog.tags,
         datePosted,
+        hasBookmarked: blog.bookmarked,
       };
     });
   });
@@ -65,6 +86,7 @@ function openBlog(blogId: any) {
       :blog-id="blog.blogId"
       :date-posted="blog.datePosted"
       :source="blog.source"
+      :has-bookmarked="blog.hasBookmarked"
       @click.stop="openBlog(blog.blogId)"
       @refresh="populateFeed"
     />

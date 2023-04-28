@@ -11,7 +11,11 @@ import {
   HandThumbDownIcon as HandThumbDownSolidIcon,
   BookmarkIcon as BookmarkSolidIcon,
 } from "@heroicons/vue/24/solid";
-import { addUserVote } from "@/services/api.service";
+import {
+  addUserVote,
+  addBookmark,
+  removeBookmark,
+} from "@/services/api.service";
 
 const emit = defineEmits(["refresh"]);
 
@@ -27,6 +31,7 @@ type BlogCardProps = {
   hasUpvoted: boolean;
   hasDownvoted: boolean;
   source: string;
+  hasBookmarked: boolean;
 };
 const props = defineProps<BlogCardProps>();
 
@@ -43,11 +48,20 @@ async function handleDownvote() {
   await addUserVote(props.blogId, props.hasDownvoted ? 0 : -1);
   emit("refresh");
 }
+
+async function handleBookmark() {
+  if (props.hasBookmarked) {
+    await removeBookmark(props.blogId);
+  } else {
+    await addBookmark(props.blogId);
+  }
+  emit("refresh");
+}
 </script>
 
 <template>
   <article>
-    <BaseCard class="gap-4 cursor-pointer card">
+    <BaseCard class="gap-2 cursor-pointer card">
       <div class="flex justify-between">
         <img
           :src="props.source"
@@ -67,7 +81,7 @@ async function handleDownvote() {
         </button>
       </div>
       <h2 class="title">{{ props.title }}</h2>
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-1">
         <div class="flex gap-1 reading-details">
           <span>{{ props.datePosted }}</span>
           <!-- <span>•</span>
@@ -77,7 +91,7 @@ async function handleDownvote() {
           <img :src="props.image" :alt="props.title" />
         </div>
       </div>
-      <div class="flex justify-between" style="margin-top: 1rem">
+      <div class="flex justify-between" style="margin-top: 0.25rem">
         <div class="flex gap-1 items-center action-btn">
           <BaseTooltip :message="props.hasUpvoted ? 'Upvoted' : 'Upvote'">
             <BaseIconButton
@@ -116,8 +130,16 @@ async function handleDownvote() {
           >
         </div>
         <BaseTooltip message="Bookmark">
-          <BaseIconButton id="bookmark-btn" class="icon-btn">
-            <BookmarkIcon />
+          <BaseIconButton
+            id="bookmark-btn"
+            class="icon-btn"
+            @click.stop="handleBookmark"
+          >
+            <BookmarkSolidIcon
+              :class="{ bookmarked: hasBookmarked }"
+              v-if="props.hasBookmarked"
+            />
+            <BookmarkIcon v-else />
           </BaseIconButton>
         </BaseTooltip>
         <BaseTooltip message="Share">
@@ -132,7 +154,7 @@ async function handleDownvote() {
 
 <style scoped>
 .card {
-  padding: 1rem 2rem;
+  padding: 1rem 1.5rem;
 }
 .image-container {
   height: 200px;
@@ -185,6 +207,11 @@ async function handleDownvote() {
   color: var(--color-green);
 }
 
+.bookmarked {
+  color: var(--color-yellow);
+  animation: bookmark 0.3s ease;
+}
+
 .upvoted-icon {
   animation: upvote 0.3s ease-in-out;
   transform-origin: 0;
@@ -204,6 +231,18 @@ async function handleDownvote() {
   }
   100% {
     transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes bookmark {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
@@ -238,7 +277,7 @@ async function handleDownvote() {
 
 .title {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   text-overflow: ellipsis;
   overflow: hidden;
   display: -webkit-box !important;
@@ -246,7 +285,7 @@ async function handleDownvote() {
   -webkit-box-orient: vertical;
   white-space: normal;
   line-height: 1.5;
-  height: 7rem;
+  height: 6rem;
   font-weight: 500;
 }
 

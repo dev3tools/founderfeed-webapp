@@ -1,6 +1,5 @@
 import axios from "axios";
 import type { InternalAxiosRequestConfig, AxiosResponse } from "axios";
-import { useRouter } from "vue-router";
 
 const unauthApi = axios.create({ baseURL: "https://api.founderfeed.io" });
 
@@ -33,11 +32,11 @@ api.interceptors.response.use(
               })
               .catch(() => {
                 localStorage.clear();
-                useRouter().push("/login");
+                window.location.reload();
               });
           } else {
             localStorage.clear();
-            useRouter().push("/login");
+            window.location.reload();
           }
         }
       }
@@ -54,8 +53,8 @@ function refreshAuthToken(refresh: string) {
   return unauthApi.post("/auth/token/refresh", { refresh });
 }
 
-function fetchFeed() {
-  return api.get("/feeds/");
+function fetchFeed(options: any) {
+  return api.get("/feeds/", { params: options });
 }
 
 function fetchPostById(id: string) {
@@ -70,4 +69,20 @@ function addUserVote(feed: number, vote: -1 | 0 | 1) {
   return api.post(`/vote/`, { feed, vote });
 }
 
-export { loginWithGoogle, fetchFeed, addUserVote, fetchPostById, fetchTags };
+function addBookmark(feed: number) {
+  return api.post(`/bookmarks/`, { feed });
+}
+
+function removeBookmark(feed: number) {
+  return api.delete(`/bookmarks/${feed}/`);
+}
+
+export {
+  loginWithGoogle,
+  fetchFeed,
+  addUserVote,
+  fetchPostById,
+  fetchTags,
+  addBookmark,
+  removeBookmark,
+};

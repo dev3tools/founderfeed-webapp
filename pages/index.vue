@@ -13,7 +13,7 @@ definePageMeta({
   middleware: ["auth"],
 });
 
-function handleMenuChange(ev) {
+async function handleMenuChange(ev) {
   selectedOption.value = ev;
 }
 
@@ -57,7 +57,7 @@ function hideOverlay() {
         </form>
       </div>
     </TransitionFade>
-    <CuratedFeed @open-blog="handleOpenBlog" />
+    <CuratedFeed :search="searchQuery" @open-blog="handleOpenBlog" />
     <TransitionFade>
       <BaseOverlay v-if="showBlog" @overlay-click="hideOverlay">
         <div style="padding-inline: 1rem">
