@@ -136,7 +136,7 @@ async function handleBookmark() {
             @click.stop="handleBookmark"
           >
             <BookmarkSolidIcon
-              :class="{ bookmarked: hasBookmarked }"
+              :class="{ bookmarked: props.hasBookmarked }"
               v-if="props.hasBookmarked"
             />
             <BookmarkIcon v-else />

@@ -12,7 +12,13 @@ import {
   BookmarkIcon as BookmarkSolidIcon,
 } from "@heroicons/vue/24/solid";
 import dayjs from "dayjs";
-import { fetchPostById, fetchTags, addUserVote } from "@/services/api.service";
+import {
+  fetchPostById,
+  fetchTags,
+  addUserVote,
+  addBookmark,
+  removeBookmark,
+} from "@/services/api.service";
 
 type BlogPostProps = {
   blogId: string;
@@ -57,6 +63,7 @@ function fetchPost() {
       summary: fetchedBlog.summary,
       tags: blogTags,
       datePosted,
+      hasBookmarked: fetchedBlog.bookmarked,
     };
   });
 }
@@ -68,6 +75,15 @@ async function handleUpvote() {
 
 async function handleDownvote() {
   await addUserVote(blog.value.blogId, blog.value.hasDownvoted ? 0 : -1);
+  fetchPost();
+}
+
+async function handleBookmark() {
+  if (blog.value.hasBookmarked) {
+    await removeBookmark(props.blogId);
+  } else {
+    await addBookmark(props.blogId);
+  }
   fetchPost();
 }
 
@@ -148,8 +164,16 @@ function handleReadMore() {
             >
           </div>
           <BaseTooltip message="Bookmark">
-            <BaseIconButton id="bookmark-btn" class="icon-btn">
-              <BookmarkIcon />
+            <BaseIconButton
+              id="bookmark-btn"
+              class="icon-btn"
+              @click.stop="handleBookmark"
+            >
+              <BookmarkSolidIcon
+                :class="{ bookmarked: blog.hasBookmarked }"
+                v-if="blog.hasBookmarked"
+              />
+              <BookmarkIcon v-else />
             </BaseIconButton>
           </BaseTooltip>
           <BaseTooltip message="Share">
@@ -277,6 +301,23 @@ function handleReadMore() {
 .downvoted-icon {
   animation: downvote 0.3s ease-in-out;
   transform-origin: 0;
+}
+
+.bookmarked {
+  color: var(--color-yellow);
+  animation: bookmark 0.3s ease;
+}
+
+@keyframes bookmark {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes upvote {
