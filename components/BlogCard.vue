@@ -281,11 +281,11 @@ async function handleBookmark() {
   text-overflow: ellipsis;
   overflow: hidden;
   display: -webkit-box !important;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   white-space: normal;
   line-height: 1.5;
-  height: 6rem;
+  height: 4rem;
   font-weight: 500;
 }
 

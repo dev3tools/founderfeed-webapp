@@ -26,10 +26,10 @@ const options = [
     name: "Top Picks",
     slug: "top-picks",
   },
-  {
-    name: "My Feed",
-    slug: "my-feed",
-  },
+  // {
+  //   name: "My Feed",
+  //   slug: "my-feed",
+  // },
   {
     name: "All Posts",
     slug: "all-posts",

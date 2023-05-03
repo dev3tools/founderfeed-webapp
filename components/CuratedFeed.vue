@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { fetchFeed } from "@/services/api.service";
+import { fetchFeed, getTags } from "@/services/api.service";
 import dayjs from "dayjs";
 import { useRoute } from "vue-router";
 
@@ -61,6 +61,42 @@ function populateFeed() {
       };
     });
   });
+  if (route.path === "/search" && props.search) {
+    getTags(props.search).then((tagsRes) => {
+      if (tagsRes.data?.length) {
+        const tagIds = tagsRes.data.map((tag) => tag.id).join(",");
+        fetchFeed({ tags: tagIds }).then((res) => {
+          blogs.value = [
+            ...blogs.value,
+            ...res.data.map((blog) => {
+              const uploadDate = dayjs(blog.uploaded_at);
+              const today = dayjs();
+              const datePosted =
+                uploadDate.format("MMM D YYYY") === today.format("MMM D YYYY")
+                  ? "Today"
+                  : `${uploadDate.format("MMM D")}`;
+              return {
+                blogId: blog.id,
+                title: blog.title,
+                image: blog.image,
+                upvotes: blog.upvotes,
+                downvotes: blog.downvotes,
+                hasUpvoted: blog.user_vote === 1,
+                hasDownvoted: blog.user_vote === -1,
+                url: blog.link,
+                source: blog.source,
+                readtime: "1 min read",
+                summary: blog.summary,
+                tags: blog.tags,
+                datePosted,
+                hasBookmarked: blog.bookmarked,
+              };
+            }),
+          ];
+        });
+      }
+    });
+  }
 }
 
 const emit = defineEmits(["open-blog"]);

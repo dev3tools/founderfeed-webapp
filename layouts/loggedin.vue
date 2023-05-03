@@ -118,7 +118,7 @@ main {
 }
 
 aside {
-  flex: 0 0 240px;
+  flex: 0 0 200px;
   padding: 2rem;
   border-right: 1px solid var(--color-card-border);
 }
