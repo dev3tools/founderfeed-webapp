@@ -94,7 +94,7 @@ function handleReadMore() {
 
 <template>
   <div class="blog">
-    <main class="flex flex-col gap-8">
+    <main class="flex flex-col gap-4">
       <h2 class="title">
         {{ blog.title }}
       </h2>
@@ -215,7 +215,7 @@ function handleReadMore() {
 
 <style scoped>
 .blog {
-  padding: 2.5rem;
+  padding: 2rem;
   max-width: 768px;
   margin: 0 auto;
 }

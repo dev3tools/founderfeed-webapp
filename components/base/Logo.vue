@@ -9,6 +9,7 @@
     var(--color-green),
     var(--color-green),
     var(--color-blue),
+    var(--color-blue),
     var(--color-red)
   );
   background-clip: text;

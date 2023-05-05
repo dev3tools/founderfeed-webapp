@@ -18,7 +18,7 @@
 }
 
 .card:where(:hover, :focus-visible) {
-  border-color: #cccccc60;
-  box-shadow: -2px -2px 20px 2px #cccccc40;
+  border-color: var(--color-card-border);
+  box-shadow: 1px 1px 20px 0px var(--color-slate-gray);
 }
 </style>
