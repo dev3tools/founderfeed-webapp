@@ -106,6 +106,11 @@ async function handleBookmark() {
 function handleReadMore() {
   window.open(blog.value.url, "_blank", "noopener");
 }
+
+async function handleShare() {
+  await navigator.clipboard.writeText(window.location.href);
+  toast.success("Link copied to clipboard");
+}
 </script>
 
 <template>
@@ -217,9 +222,16 @@ function handleReadMore() {
                 >{{ blog.hasBookmarked ? "Bookmarked" : "Bookmark" }}</span
               >
             </div>
-            <div class="flex gap-1 items-center action-btn">
+            <div
+              class="flex gap-1 items-center action-btn"
+              @click.stop="handleShare"
+            >
               <BaseTooltip message="Share">
-                <BaseIconButton id="share-btn" class="icon-btn">
+                <BaseIconButton
+                  id="share-btn"
+                  class="icon-btn"
+                  @click.stop="handleShare"
+                >
                   <PaperAirplaneIcon />
                 </BaseIconButton>
               </BaseTooltip>

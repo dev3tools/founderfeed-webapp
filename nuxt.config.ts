@@ -30,6 +30,11 @@ export default defineNuxtConfig({
           rel: "stylesheet",
           href: "/style.css",
         },
+        {
+          rel: "icon",
+          type: "image/x-icon",
+          href: "/favicon.png",
+        },
       ],
       script: [
         {

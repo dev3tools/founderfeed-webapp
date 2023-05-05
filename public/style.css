@@ -13,7 +13,8 @@
   --color-blue-opacity: #b25fff50;
   --color-yellow: #c47b0e;
   --color-yellow-opacity: #fdca2050;
-  --color-slate-gray: slategrey;
+  --color-slate-gray: rgb(112, 128, 144);
+  --color-slate-gray-opacity: rgba(112, 128, 144, 0.5);
 
   --font-primary: "Inter", sans-serif;
   --font-secondary: "Lilita One", sans-serif;

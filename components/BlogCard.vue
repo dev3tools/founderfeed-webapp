@@ -16,6 +16,7 @@ import {
   addBookmark,
   removeBookmark,
 } from "@/services/api.service";
+import { toast } from "vue3-toastify";
 
 const emit = defineEmits(["refresh"]);
 
@@ -56,6 +57,13 @@ async function handleBookmark() {
     await addBookmark(props.blogId);
   }
   emit("refresh");
+}
+
+async function handleShare() {
+  await navigator.clipboard.writeText(
+    `https://founderfeed.io/posts/${props.blogId}`
+  );
+  toast.success("Link copied to clipboard");
 }
 </script>
 
@@ -143,7 +151,11 @@ async function handleBookmark() {
           </BaseIconButton>
         </BaseTooltip>
         <BaseTooltip message="Share">
-          <BaseIconButton id="share-btn" class="icon-btn">
+          <BaseIconButton
+            id="share-btn"
+            class="icon-btn"
+            @click.stop="handleShare"
+          >
             <PaperAirplaneIcon />
           </BaseIconButton>
         </BaseTooltip>
@@ -159,7 +171,7 @@ async function handleBookmark() {
 
 .card:where(:hover, :focus-visible) {
   border-color: var(--color-card-border);
-  box-shadow: 1px 1px 20px 0px var(--color-slate-gray);
+  box-shadow: 1px 1px 20px 0px var(--color-slate-gray-opacity);
 }
 .image-container {
   height: 200px;
@@ -320,6 +332,6 @@ async function handleBookmark() {
 }
 
 .read-external:hover {
-  box-shadow: 0px 0px 8px 0px var(--color-slate-gray);
+  box-shadow: 0px 0px 8px 0px var(--color-slate-gray-opacity);
 }
 </style>
