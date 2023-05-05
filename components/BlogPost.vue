@@ -104,7 +104,7 @@ async function handleBookmark() {
 }
 
 function handleReadMore() {
-  window.open(blog.url, "_blank", "noopener");
+  window.open(blog.value.url, "_blank", "noopener");
 }
 </script>
 
