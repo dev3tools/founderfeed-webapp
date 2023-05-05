@@ -156,6 +156,11 @@ async function handleBookmark() {
 .card {
   padding: 1rem 1.5rem;
 }
+
+.card:where(:hover, :focus-visible) {
+  border-color: var(--color-card-border);
+  box-shadow: 1px 1px 20px 0px var(--color-slate-gray);
+}
 .image-container {
   height: 200px;
   margin-inline: -1rem;

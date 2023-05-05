@@ -119,6 +119,11 @@ p {
 
 <style>
 .login-body {
-  background: var(--color-blue-variant);
+  background: linear-gradient(
+    to bottom right,
+    var(--color-green),
+    var(--color-blue),
+    var(--color-red)
+  );
 }
 </style>

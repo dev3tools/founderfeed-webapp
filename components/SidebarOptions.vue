@@ -60,6 +60,9 @@ function handleClick(option: { name: string; slug: string }) {
 </script>
 
 <template>
+  <Head>
+    <Title>{{ selectedOption.name }} | FounderFeed.io</Title>
+  </Head>
   <nav class="flex flex-col gap-4">
     <span class="sub-heading">Discover</span>
     <div class="flex flex-col gap-1">

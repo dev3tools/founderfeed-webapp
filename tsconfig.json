@@ -1,7 +1,7 @@
 {
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
-    "types": ["@morev/vue-transitions/types/volar"]
+    "types": ["@morev/vue-transitions/types/volar", "vue3-toastify/global"]
   },
   "include": ["env.d.ts", "src/**/*.ts", "src/**/*.vue", "src/**/*.d.ts"]
 }

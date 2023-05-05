@@ -16,9 +16,4 @@
   border-radius: 1rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-
-.card:where(:hover, :focus-visible) {
-  border-color: var(--color-card-border);
-  box-shadow: 1px 1px 20px 0px var(--color-slate-gray);
-}
 </style>

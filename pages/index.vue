@@ -8,6 +8,7 @@ const searchInput = ref(null);
 const searchQuery = ref("");
 const showBlog = ref(false);
 const selectedBlogId = ref("");
+const title = ref("");
 
 definePageMeta({
   middleware: ["auth"],
@@ -15,6 +16,17 @@ definePageMeta({
 
 async function handleMenuChange(ev) {
   selectedOption.value = ev;
+  if (selectedOption.value === "all-posts") {
+    title.value = "All posts";
+  } else if (selectedOption.value === "top-picks") {
+    title.value = "Top Picks";
+  } else if (selectedOption.value === "bookmarks") {
+    title.value = "Bookmarks";
+  } else if (selectedOption.value === "search") {
+    title.value = "Search Posts";
+  } else {
+    title.value = "";
+  }
 }
 
 function handleOpenBlog(ev) {
@@ -32,31 +44,30 @@ function hideOverlay() {
 
 <template>
   <NuxtLayout name="loggedin" @menu-change="handleMenuChange">
-    <TransitionFade>
-      <div v-if="selectedOption === 'search'">
-        <form class="flex flex-grow" @submit.prevent="void 0">
-          <div class="input-group" @click.stop="searchInput.focus()">
-            <MagnifyingGlassIcon class="input-icon" />
-            <input
-              type="text"
-              placeholder="Search posts"
-              class="search-input"
-              ref="searchInput"
-              v-model="searchQuery"
-            />
-            <TransitionFade>
-              <BaseIconButton
-                v-if="searchQuery.trim()"
-                class="input-icon-end-btn"
-                @click="searchQuery = ''"
-              >
-                <XMarkIcon class="input-icon-end" />
-              </BaseIconButton>
-            </TransitionFade>
-          </div>
-        </form>
-      </div>
-    </TransitionFade>
+    <h2 v-if="title">{{ title }}</h2>
+    <div v-if="selectedOption === 'search'">
+      <form class="flex flex-grow" @submit.prevent="void 0">
+        <div class="input-group" @click.stop="searchInput.focus()">
+          <MagnifyingGlassIcon class="input-icon" />
+          <input
+            type="text"
+            placeholder="Search posts"
+            class="search-input"
+            ref="searchInput"
+            v-model="searchQuery"
+          />
+          <TransitionFade>
+            <BaseIconButton
+              v-if="searchQuery.trim()"
+              class="input-icon-end-btn"
+              @click="searchQuery = ''"
+            >
+              <XMarkIcon class="input-icon-end" />
+            </BaseIconButton>
+          </TransitionFade>
+        </div>
+      </form>
+    </div>
     <CuratedFeed :search="searchQuery" @open-blog="handleOpenBlog" />
     <TransitionFade>
       <BaseOverlay v-if="showBlog" @overlay-click="hideOverlay">

@@ -19,6 +19,7 @@ import {
   addBookmark,
   removeBookmark,
 } from "@/services/api.service";
+import { toast } from "vue3-toastify";
 
 type BlogPostProps = {
   blogId: string;
@@ -27,6 +28,7 @@ const props = defineProps<BlogPostProps>();
 
 const blog = ref({});
 let tags = [];
+const error = ref(false);
 
 fetchTags().then((res) => {
   tags = res.data;
@@ -34,38 +36,52 @@ fetchTags().then((res) => {
 });
 
 function fetchPost() {
-  fetchPostById(props.blogId).then((res) => {
-    const fetchedBlog = res.data;
-    const uploadDate = dayjs(fetchedBlog.uploaded_at);
-    const today = dayjs();
-    const datePosted =
-      uploadDate.format("MMM D YYYY") === today.format("MMM D YYYY")
-        ? "Today"
-        : `${uploadDate.format("MMM D")}`;
-    const blogTags: string[] = [];
-    fetchedBlog.tags.forEach((tag) => {
-      const tagObj = tags.find((t) => t.id === tag);
-      if (tagObj) {
-        blogTags.push(tagObj.name);
+  fetchPostById(props.blogId)
+    .then((res) => {
+      const fetchedBlog = res.data;
+      const uploadDate = dayjs(fetchedBlog.uploaded_at);
+      const today = dayjs();
+      const datePosted =
+        uploadDate.format("MMM D YYYY") === today.format("MMM D YYYY")
+          ? "Today"
+          : `${uploadDate.format("MMM D")}`;
+      const blogTags: string[] = [];
+      fetchedBlog.tags.forEach((tag) => {
+        const tagObj = tags.find((t) => t.id === tag);
+        if (tagObj) {
+          blogTags.push(tagObj.name);
+        }
+      });
+      blog.value = {
+        blogId: fetchedBlog.id,
+        title: fetchedBlog.title,
+        image: fetchedBlog.image,
+        upvotes: fetchedBlog.upvotes,
+        downvotes: fetchedBlog.downvotes,
+        hasUpvoted: fetchedBlog.user_vote === 1,
+        hasDownvoted: fetchedBlog.user_vote === -1,
+        url: fetchedBlog.link,
+        source: fetchedBlog.source,
+        readtime: "1 min read",
+        summary: fetchedBlog.summary,
+        tags: blogTags,
+        datePosted,
+        hasBookmarked: fetchedBlog.bookmarked,
+      };
+      document.title = `${blog.value.title} | FounderFeed.io`;
+    })
+    .catch((e) => {
+      console.log(e);
+      if (e.response.status === 404) {
+        toast.error("Blog not found");
+        error.value = 404;
+        document.title = `Blog not found | FounderFeed.io`;
+      } else {
+        toast.error("Something went wrong");
+        error.value = true;
+        document.title = `Error | FounderFeed.io`;
       }
     });
-    blog.value = {
-      blogId: fetchedBlog.id,
-      title: fetchedBlog.title,
-      image: fetchedBlog.image,
-      upvotes: fetchedBlog.upvotes,
-      downvotes: fetchedBlog.downvotes,
-      hasUpvoted: fetchedBlog.user_vote === 1,
-      hasDownvoted: fetchedBlog.user_vote === -1,
-      url: fetchedBlog.link,
-      source: fetchedBlog.source,
-      readtime: "1 min read",
-      summary: fetchedBlog.summary,
-      tags: blogTags,
-      datePosted,
-      hasBookmarked: fetchedBlog.bookmarked,
-    };
-  });
 }
 
 async function handleUpvote() {
@@ -93,124 +109,139 @@ function handleReadMore() {
 </script>
 
 <template>
-  <div class="blog">
-    <main class="flex flex-col gap-4">
-      <h2 class="title">
-        {{ blog.title }}
-      </h2>
-      <div>
-        <button
-          class="read-external flex gap-1 items-center"
-          @click.stop="handleReadMore"
-        >
-          Read the blog
-          <ArrowTopRightOnSquareIcon style="width: 1.25rem" />
-        </button>
-      </div>
-      <div class="blog-summary">
-        <span class="tldr">TLDR;</span> {{ blog.summary }}
-      </div>
-      <div class="flex gap-4">
-        <BaseChip v-for="tag in blog.tags" :key="tag">{{ tag }}</BaseChip>
-      </div>
-      <div class="flex gap-1 reading-details">
-        <span>{{ blog.datePosted }}</span>
-        <!-- <span>•</span>
-        <span>15m readtime</span> -->
-      </div>
-      <div class="image-container">
-        <img :src="blog.image" :alt="blog.title" />
-      </div>
-      <BaseCard style="width: auto; padding: 0.5rem 1rem">
-        <div class="flex justify-between items-center">
-          <div
-            class="flex gap-1 items-center action-btn"
-            @click.stop="handleUpvote"
+  <TransitionFade>
+    <div v-if="blog.blogId" class="blog">
+      <main class="flex flex-col gap-4">
+        <h2 class="title">
+          {{ blog.title }}
+        </h2>
+        <div>
+          <button
+            class="read-external flex gap-1 items-center"
+            @click.stop="handleReadMore"
           >
-            <BaseTooltip :message="'Upvote'">
-              <BaseIconButton
-                id="upvote-btn"
-                class="icon-btn"
-                @click.stop="handleUpvote"
-              >
-                <HandThumbUpSolidIcon
-                  v-if="blog.hasUpvoted"
-                  class="upvoted upvoted-icon"
-                />
-                <HandThumbUpIcon v-else />
-              </BaseIconButton>
-            </BaseTooltip>
-            <span
-              class="icon-btn-text upvote"
-              :class="{ upvoted: blog.hasUpvoted }"
-              >{{ blog.upvotes
-              }}<span class="hide-tablet" style="margin-left: 0.375rem">{{
-                blog.upvotes === 1 ? "Upvote" : "Upvotes"
-              }}</span></span
-            >
-          </div>
-          <div
-            class="flex gap-1 items-center action-btn"
-            @click.stop="handleDownvote"
-          >
-            <BaseTooltip :message="'Downvote'">
-              <BaseIconButton
-                id="downvote-btn"
-                class="icon-btn"
-                @click.stop="handleDownvote"
-              >
-                <HandThumbDownSolidIcon
-                  v-if="blog.hasDownvoted"
-                  class="downvoted downvoted-icon"
-                />
-                <HandThumbDownIcon v-else />
-              </BaseIconButton>
-            </BaseTooltip>
-            <span
-              class="icon-btn-text downvote"
-              :class="{ downvoted: blog.hasDownvoted }"
-              >{{ blog.downvotes
-              }}<span class="hide-tablet" style="margin-left: 0.375rem">{{
-                blog.downvotes === 1 ? "Downvote" : "Downvotes"
-              }}</span></span
-            >
-          </div>
-          <div
-            class="flex gap-1 items-center action-btn"
-            @click.stop="handleBookmark"
-          >
-            <BaseTooltip message="Bookmark">
-              <BaseIconButton
-                id="bookmark-btn"
-                class="icon-btn"
-                @click.stop="handleBookmark"
-              >
-                <BookmarkSolidIcon
-                  :class="{ 'bookmarked bookmarked-icon': blog.hasBookmarked }"
-                  v-if="blog.hasBookmarked"
-                />
-                <BookmarkIcon v-else />
-              </BaseIconButton>
-            </BaseTooltip>
-            <span
-              class="icon-btn-text bookmark hide-tablet"
-              :class="{ bookmarked: blog.hasBookmarked }"
-              >{{ blog.hasBookmarked ? "Bookmarked" : "Bookmark" }}</span
-            >
-          </div>
-          <div class="flex gap-1 items-center action-btn">
-            <BaseTooltip message="Share">
-              <BaseIconButton id="share-btn" class="icon-btn">
-                <PaperAirplaneIcon />
-              </BaseIconButton>
-            </BaseTooltip>
-            <span class="icon-btn-text share hide-tablet">Share</span>
-          </div>
+            Read the blog
+            <ArrowTopRightOnSquareIcon style="width: 1.25rem" />
+          </button>
         </div>
-      </BaseCard>
-    </main>
-    <aside></aside>
-  </div>
+        <div class="blog-summary">
+          <span class="tldr">TLDR;</span> {{ blog.summary }}
+        </div>
+        <div class="flex gap-4">
+          <BaseChip v-for="tag in blog.tags" :key="tag">{{ tag }}</BaseChip>
+        </div>
+        <div class="flex gap-1 reading-details">
+          <span>{{ blog.datePosted }}</span>
+          <!-- <span>•</span>
+        <span>15m readtime</span> -->
+        </div>
+        <div class="image-container">
+          <img :src="blog.image" :alt="blog.title" />
+        </div>
+        <BaseCard style="width: auto; padding: 0.5rem 1rem">
+          <div class="flex justify-between items-center">
+            <div
+              class="flex gap-1 items-center action-btn"
+              @click.stop="handleUpvote"
+            >
+              <BaseTooltip :message="'Upvote'">
+                <BaseIconButton
+                  id="upvote-btn"
+                  class="icon-btn"
+                  @click.stop="handleUpvote"
+                >
+                  <HandThumbUpSolidIcon
+                    v-if="blog.hasUpvoted"
+                    class="upvoted upvoted-icon"
+                  />
+                  <HandThumbUpIcon v-else />
+                </BaseIconButton>
+              </BaseTooltip>
+              <span
+                class="icon-btn-text upvote"
+                :class="{ upvoted: blog.hasUpvoted }"
+                >{{ blog.upvotes
+                }}<span class="hide-tablet" style="margin-left: 0.375rem">{{
+                  blog.upvotes === 1 ? "Upvote" : "Upvotes"
+                }}</span></span
+              >
+            </div>
+            <div
+              class="flex gap-1 items-center action-btn"
+              @click.stop="handleDownvote"
+            >
+              <BaseTooltip :message="'Downvote'">
+                <BaseIconButton
+                  id="downvote-btn"
+                  class="icon-btn"
+                  @click.stop="handleDownvote"
+                >
+                  <HandThumbDownSolidIcon
+                    v-if="blog.hasDownvoted"
+                    class="downvoted downvoted-icon"
+                  />
+                  <HandThumbDownIcon v-else />
+                </BaseIconButton>
+              </BaseTooltip>
+              <span
+                class="icon-btn-text downvote"
+                :class="{ downvoted: blog.hasDownvoted }"
+                >{{ blog.downvotes
+                }}<span class="hide-tablet" style="margin-left: 0.375rem">{{
+                  blog.downvotes === 1 ? "Downvote" : "Downvotes"
+                }}</span></span
+              >
+            </div>
+            <div
+              class="flex gap-1 items-center action-btn"
+              @click.stop="handleBookmark"
+            >
+              <BaseTooltip message="Bookmark">
+                <BaseIconButton
+                  id="bookmark-btn"
+                  class="icon-btn"
+                  @click.stop="handleBookmark"
+                >
+                  <BookmarkSolidIcon
+                    :class="{
+                      'bookmarked bookmarked-icon': blog.hasBookmarked,
+                    }"
+                    v-if="blog.hasBookmarked"
+                  />
+                  <BookmarkIcon v-else />
+                </BaseIconButton>
+              </BaseTooltip>
+              <span
+                class="icon-btn-text bookmark hide-tablet"
+                :class="{ bookmarked: blog.hasBookmarked }"
+                >{{ blog.hasBookmarked ? "Bookmarked" : "Bookmark" }}</span
+              >
+            </div>
+            <div class="flex gap-1 items-center action-btn">
+              <BaseTooltip message="Share">
+                <BaseIconButton id="share-btn" class="icon-btn">
+                  <PaperAirplaneIcon />
+                </BaseIconButton>
+              </BaseTooltip>
+              <span class="icon-btn-text share hide-tablet">Share</span>
+            </div>
+          </div>
+        </BaseCard>
+      </main>
+      <aside></aside>
+    </div>
+    <div v-else>
+      <div v-if="error === 404">
+        <h2>Blog not found</h2>
+      </div>
+      <div v-else-if="error">
+        <h2>Something went wrong</h2>
+      </div>
+      <div v-else>
+        <h2>Loading...</h2>
+      </div>
+    </div>
+  </TransitionFade>
 </template>
 
 <style scoped>

@@ -53,7 +53,7 @@ function onSidebarOptionChange(ev: string) {
         @overlay-click="sidebarExpanded = false"
       >
         <aside
-          class="overlay-content mobile-sidebar flex flex-col"
+          class="overlay-content mobile-sidebar flex flex-col gap-8"
           :class="{ expanded: sidebarExpanded }"
         >
           <header>
@@ -70,7 +70,6 @@ function onSidebarOptionChange(ev: string) {
             </div>
           </header>
           <SidebarOptions
-            style="padding-top: 2rem"
             :selected-option="selectedOption"
             @change="onSidebarOptionChange"
           />

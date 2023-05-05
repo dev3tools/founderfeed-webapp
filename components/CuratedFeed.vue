@@ -98,30 +98,34 @@ function populateFeed() {
         fetchFeed({ tags: tagIds }).then((res) => {
           blogs.value = [
             ...blogs.value,
-            ...res.data.map((blog) => {
-              const uploadDate = dayjs(blog.uploaded_at);
-              const today = dayjs();
-              const datePosted =
-                uploadDate.format("MMM D YYYY") === today.format("MMM D YYYY")
-                  ? "Today"
-                  : `${uploadDate.format("MMM D")}`;
-              return {
-                blogId: blog.id,
-                title: blog.title,
-                image: blog.image,
-                upvotes: blog.upvotes,
-                downvotes: blog.downvotes,
-                hasUpvoted: blog.user_vote === 1,
-                hasDownvoted: blog.user_vote === -1,
-                url: blog.link,
-                source: blog.source,
-                readtime: "1 min read",
-                summary: blog.summary,
-                tags: blog.tags,
-                datePosted,
-                hasBookmarked: blog.bookmarked,
-              };
-            }),
+            ...res.data
+              .filter((blog) => {
+                return !blogs.value.find((b) => b.blogId === blog.id);
+              })
+              .map((blog) => {
+                const uploadDate = dayjs(blog.uploaded_at);
+                const today = dayjs();
+                const datePosted =
+                  uploadDate.format("MMM D YYYY") === today.format("MMM D YYYY")
+                    ? "Today"
+                    : `${uploadDate.format("MMM D")}`;
+                return {
+                  blogId: blog.id,
+                  title: blog.title,
+                  image: blog.image,
+                  upvotes: blog.upvotes,
+                  downvotes: blog.downvotes,
+                  hasUpvoted: blog.user_vote === 1,
+                  hasDownvoted: blog.user_vote === -1,
+                  url: blog.link,
+                  source: blog.source,
+                  readtime: "1 min read",
+                  summary: blog.summary,
+                  tags: blog.tags,
+                  datePosted,
+                  hasBookmarked: blog.bookmarked,
+                };
+              }),
           ];
         });
       }
