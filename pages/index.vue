@@ -14,6 +14,10 @@ definePageMeta({
   middleware: ["auth"],
 });
 
+onMounted(() => {
+  handleMenuChange(route.path.replace("/", ""));
+});
+
 async function handleMenuChange(ev) {
   selectedOption.value = ev;
   if (selectedOption.value === "all-posts") {
