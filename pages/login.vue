@@ -2,7 +2,7 @@
 import { onMounted, onBeforeMount, onBeforeUnmount } from "vue";
 import jwt_decode from "jwt-decode";
 import { useRouter } from "vue-router";
-import { loginWithGoogle } from "../services/api.service";
+import { batchRefresh, loginWithGoogle } from "../services/api.service";
 // import { startRefreshInterval } from "../utils/refreshToken";
 // import { useLoaderStore } from "../store/loader.store";
 
@@ -49,6 +49,7 @@ async function handleSignIn(data: any) {
   const userDetails: any = jwt_decode(data.credential);
   localStorage.setItem("access_token", apiResponse.tokens.access);
   localStorage.setItem("refresh_token", apiResponse.tokens.refresh);
+  batchRefresh();
   const user = {
     name: userDetails.name,
     profileImage: userDetails.picture,

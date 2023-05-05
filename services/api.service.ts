@@ -19,11 +19,15 @@ function loginWithGoogle(auth_token: string) {
 }
 
 function refreshAuthToken(refresh: string) {
-  return unauthApi.post("/auth/token/refresh", { refresh });
+  return unauthApi.post("/auth/token/refresh/", { refresh });
 }
 
 function fetchFeed(options?: any) {
   return api.get("/feeds/", { params: options });
+}
+
+function searchFeed(query: string) {
+  return api.get("/search/", { params: { search: query } });
 }
 
 function fetchPostById(id: string) {
@@ -46,8 +50,25 @@ function removeBookmark(feed: number) {
   return api.delete(`/bookmarks/${feed}/`);
 }
 
+function getBookmarks() {
+  return api.get("/bookmarks/");
+}
+
 function getTags(search: string) {
   return api.get("/tags/", { params: { name__icontains: search } });
+}
+
+function batchRefresh() {
+  if (process.client) {
+    setInterval(() => {
+      const refreshToken = localStorage.getItem("refresh_token") as string;
+      if (refreshAuthToken) {
+        refreshAuthToken(refreshToken).then((res) => {
+          localStorage.setItem("access_token", res.data.access);
+        });
+      }
+    }, 60000);
+  }
 }
 
 export {
@@ -60,4 +81,7 @@ export {
   removeBookmark,
   refreshAuthToken,
   getTags,
+  batchRefresh,
+  searchFeed,
+  getBookmarks,
 };

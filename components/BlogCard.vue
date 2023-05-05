@@ -158,7 +158,7 @@ async function handleBookmark() {
 }
 .image-container {
   height: 200px;
-  margin-inline: -1.25rem;
+  margin-inline: -1rem;
   border-radius: 0.5rem;
   overflow: hidden;
 }
@@ -281,11 +281,11 @@ async function handleBookmark() {
   text-overflow: ellipsis;
   overflow: hidden;
   display: -webkit-box !important;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   white-space: normal;
   line-height: 1.5;
-  height: 4rem;
+  height: 2rem;
   font-weight: 500;
 }
 

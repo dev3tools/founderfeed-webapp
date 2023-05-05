@@ -123,7 +123,10 @@ function handleReadMore() {
       </div>
       <BaseCard style="width: auto; padding: 0.5rem 1rem">
         <div class="flex justify-between items-center">
-          <div class="flex gap-1 items-center action-btn">
+          <div
+            class="flex gap-1 items-center action-btn"
+            @click.stop="handleUpvote"
+          >
             <BaseTooltip :message="'Upvote'">
               <BaseIconButton
                 id="upvote-btn"
@@ -140,10 +143,16 @@ function handleReadMore() {
             <span
               class="icon-btn-text upvote"
               :class="{ upvoted: blog.hasUpvoted }"
-              >{{ blog.upvotes }}</span
+              >{{ blog.upvotes
+              }}<span class="hide-tablet" style="margin-left: 0.375rem">{{
+                blog.upvotes === 1 ? "Upvote" : "Upvotes"
+              }}</span></span
             >
           </div>
-          <div class="flex gap-1 items-center action-btn">
+          <div
+            class="flex gap-1 items-center action-btn"
+            @click.stop="handleDownvote"
+          >
             <BaseTooltip :message="'Downvote'">
               <BaseIconButton
                 id="downvote-btn"
@@ -160,27 +169,43 @@ function handleReadMore() {
             <span
               class="icon-btn-text downvote"
               :class="{ downvoted: blog.hasDownvoted }"
-              >{{ blog.downvotes }}</span
+              >{{ blog.downvotes
+              }}<span class="hide-tablet" style="margin-left: 0.375rem">{{
+                blog.downvotes === 1 ? "Downvote" : "Downvotes"
+              }}</span></span
             >
           </div>
-          <BaseTooltip message="Bookmark">
-            <BaseIconButton
-              id="bookmark-btn"
-              class="icon-btn"
-              @click.stop="handleBookmark"
+          <div
+            class="flex gap-1 items-center action-btn"
+            @click.stop="handleBookmark"
+          >
+            <BaseTooltip message="Bookmark">
+              <BaseIconButton
+                id="bookmark-btn"
+                class="icon-btn"
+                @click.stop="handleBookmark"
+              >
+                <BookmarkSolidIcon
+                  :class="{ 'bookmarked bookmarked-icon': blog.hasBookmarked }"
+                  v-if="blog.hasBookmarked"
+                />
+                <BookmarkIcon v-else />
+              </BaseIconButton>
+            </BaseTooltip>
+            <span
+              class="icon-btn-text bookmark hide-tablet"
+              :class="{ bookmarked: blog.hasBookmarked }"
+              >{{ blog.hasBookmarked ? "Bookmarked" : "Bookmark" }}</span
             >
-              <BookmarkSolidIcon
-                :class="{ bookmarked: blog.hasBookmarked }"
-                v-if="blog.hasBookmarked"
-              />
-              <BookmarkIcon v-else />
-            </BaseIconButton>
-          </BaseTooltip>
-          <BaseTooltip message="Share">
-            <BaseIconButton id="share-btn" class="icon-btn">
-              <PaperAirplaneIcon />
-            </BaseIconButton>
-          </BaseTooltip>
+          </div>
+          <div class="flex gap-1 items-center action-btn">
+            <BaseTooltip message="Share">
+              <BaseIconButton id="share-btn" class="icon-btn">
+                <PaperAirplaneIcon />
+              </BaseIconButton>
+            </BaseTooltip>
+            <span class="icon-btn-text share hide-tablet">Share</span>
+          </div>
         </div>
       </BaseCard>
     </main>
@@ -221,7 +246,7 @@ function handleReadMore() {
 }
 
 .image-container {
-  max-width: 400px;
+  max-width: 480px;
   border-radius: 0.5rem;
   overflow: hidden;
 }
@@ -255,12 +280,16 @@ function handleReadMore() {
   color: var(--color-red);
 }
 
-#share-btn:hover {
+.action-btn:hover #share-btn {
   background-color: var(--color-blue-opacity);
   color: var(--color-blue);
 }
 
-#bookmark-btn:hover {
+.action-btn:hover .share {
+  color: var(--color-blue);
+}
+
+.action-btn:hover #bookmark-btn {
   background-color: var(--color-yellow-opacity);
   color: var(--color-yellow);
 }
@@ -303,8 +332,12 @@ function handleReadMore() {
   transform-origin: 0;
 }
 
-.bookmarked {
+.bookmarked,
+.action-btn:hover .bookmark {
   color: var(--color-yellow);
+}
+
+.bookmarked-icon {
   animation: bookmark 0.3s ease;
 }
 
@@ -353,6 +386,12 @@ function handleReadMore() {
   }
   100% {
     transform: scale(1) translateX(0);
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .hide-tablet {
+    display: none;
   }
 }
 </style>

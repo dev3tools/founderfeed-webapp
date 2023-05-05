@@ -60,7 +60,7 @@ function hideOverlay() {
     <CuratedFeed :search="searchQuery" @open-blog="handleOpenBlog" />
     <TransitionFade>
       <BaseOverlay v-if="showBlog" @overlay-click="hideOverlay">
-        <div style="padding-inline: 1rem">
+        <div style="padding-inline: 0.25rem">
           <div class="overlay-content">
             <BlogPost :blog-id="selectedBlogId" class="blog-post" />
           </div>
