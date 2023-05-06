@@ -9,6 +9,7 @@ const searchQuery = ref("");
 const showBlog = ref(false);
 const selectedBlogId = ref("");
 const title = ref("");
+const refresh = ref(false);
 
 definePageMeta({
   middleware: ["auth"],
@@ -40,6 +41,7 @@ function handleOpenBlog(ev) {
 }
 
 function hideOverlay() {
+  refresh.value = true;
   showBlog.value = false;
   selectedBlogId.value = "";
   history.back();
@@ -72,7 +74,12 @@ function hideOverlay() {
         </div>
       </form>
     </div>
-    <CuratedFeed :search="searchQuery" @open-blog="handleOpenBlog" />
+    <CuratedFeed
+      :search="searchQuery"
+      :refresh="refresh"
+      @refreshed="refresh = false"
+      @open-blog="handleOpenBlog"
+    />
     <TransitionFade>
       <BaseOverlay v-if="showBlog" @overlay-click="hideOverlay">
         <div style="padding-inline: 0.25rem">

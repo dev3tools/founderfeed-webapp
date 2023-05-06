@@ -5,9 +5,11 @@ import { useRoute } from "vue-router";
 
 type FeedProps = {
   search?: string;
+  refresh: boolean;
 };
 
 const props = defineProps<FeedProps>();
+const emit = defineEmits(["refreshed", "open-blog"]);
 
 const blogs = ref([]);
 const route = useRoute();
@@ -24,6 +26,16 @@ watch(
   () => props.search,
   () => {
     populateFeed();
+  }
+);
+
+watch(
+  () => props.refresh,
+  () => {
+    if (props.refresh) {
+      populateFeed();
+      emit("refreshed");
+    }
   }
 );
 
@@ -132,8 +144,6 @@ function populateFeed() {
     });
   }
 }
-
-const emit = defineEmits(["open-blog"]);
 
 function openBlog(blogId: any) {
   emit("open-blog", blogId);
